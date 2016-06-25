@@ -162,6 +162,11 @@ const app = express();
 
 app.use(bodyParser.text({ type: 'application/json' }));
 
+// Index route
+app.get('/', function (req, res) {
+    res.send('Hello world, I am a chat bot')
+})
+
 app.get('/webhook/', function (req, res) {
     if (req.query['hub.verify_token'] == FB_VERIFY_TOKEN) {
         res.send(req.query['hub.challenge']);
