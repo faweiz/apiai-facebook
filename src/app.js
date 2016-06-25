@@ -49,7 +49,7 @@ function processEvent(event) {
                         sendFBMessage(sender, {text: err.message });
                     }
                 } else if (isDefined(responseText)) {
-                    console.log('Response as text message');
+                    console.log('Response as text message', responseText);
                     // facebook API limit for text length is 320,
                     // so we split message if needed
                     var splittedText = splitResponse(responseText);
@@ -160,13 +160,14 @@ function isDefined(obj) {
 
 const app = express();
 
+// Process application/json
 app.use(bodyParser.text({ type: 'application/json' }));
 
 // Index route
 app.get('/', function (req, res) {
     res.send('Hello world, I am a chat bot')
 })
-
+// for Facebook verification
 app.get('/webhook/', function (req, res) {
     if (req.query['hub.verify_token'] == FB_VERIFY_TOKEN) {
         res.send(req.query['hub.challenge']);
@@ -200,6 +201,7 @@ app.post('/webhook/', function (req, res) {
 
 });
 
+// Spin up the server
 app.listen(REST_PORT, function () {
     console.log('Rest service ready on port ' + REST_PORT);
 });
