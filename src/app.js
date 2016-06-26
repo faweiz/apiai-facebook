@@ -165,7 +165,8 @@ app.use(bodyParser.text({ type: 'application/json' }));
 
 // Index route
 app.get('/', function (req, res) {
-    res.send('Hello world, I am a chat bot')
+    res.send('Hello world, I am a chat bot');
+res.json({notes : "This is your notebook. Edit this to start saving your notes!"});	
 })
 // for Facebook verification
 app.get('/webhook/', function (req, res) {
@@ -179,7 +180,7 @@ app.get('/webhook/', function (req, res) {
         }, 3000);
     } else {
         
-res.json({notes 2: "This is your notebook. Edit this to start saving your notes!"});		
+//res.json({notes 2: "This is your notebook. Edit this to start saving your notes!"});		
         
         res.send('Error, wrong validation token');
     }
