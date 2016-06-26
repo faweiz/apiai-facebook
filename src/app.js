@@ -172,7 +172,7 @@ app.get('/webhook/', function (req, res) {
     if (req.query['hub.verify_token'] == FB_VERIFY_TOKEN) {
         res.send(req.query['hub.challenge']);
         
-//res.json({notes 1: "This is your notebook. Edit this to start saving your notes!"});
+res.json({notes 1: "This is your notebook. Edit this to start saving your notes!"});
         
         setTimeout(function () {
             doSubscribeRequest();
