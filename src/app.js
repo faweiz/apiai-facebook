@@ -40,6 +40,8 @@ function processEvent(event) {
                 }
             ]
         });
+        
+        console.log('userName: 'userName);
 
         apiaiRequest.on('response', (response) => {
             if (isDefined(response.result)) {
