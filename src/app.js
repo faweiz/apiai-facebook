@@ -170,7 +170,7 @@ app.get('/', function (req, res) {
         "password": "1234",
         "twitter": "@nraboy"
     }
-    res.send('Hello world, I am a chat bot');
+//    res.send('Hello world, I am a chat bot');
     res.send(accountMock);
 })
 // for Facebook verification
