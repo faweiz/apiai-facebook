@@ -34,13 +34,14 @@ function processEvent(event) {
         {
            sessionId: sessionIds.get(sender),
            
-           contexts: [
+/*           contexts: [
 {
 name: "generic",
 parameters: {
 facebook_user: userName
 }
 }]
+*/
            
         });
         
