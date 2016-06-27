@@ -165,13 +165,7 @@ app.use(bodyParser.text({ type: 'application/json' }));
 
 // Index route
 app.get('/', function (req, res) {
-    var accountMock = {
-        "username": "nraboy",
-        "password": "1234",
-        "twitter": "@nraboy"
-    }
-//    res.send('Hello world, I am a chat bot');
-    res.send(accountMock);
+     res.send('Hello world, I am a chat bot');
 })
 // for Facebook verification
 app.get('/webhook/', function (req, res) {
