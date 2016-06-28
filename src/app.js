@@ -168,6 +168,15 @@ function isDefined(obj) {
     return obj != null;
 }
 
+function convertToEST(){
+    //EST
+    offset = -5.0
+    clientDate = new Date();
+    utc = clientDate.getTime() + (clientDate.getTimezoneOffset() * 60000);
+    serverDate = new Date(utc + (3600000*offset));
+    return serverDate.toLocaleString();
+}
+
 const app = express();
 
 // Process application/json
@@ -210,6 +219,10 @@ app.post('/webhook/', function (req, res) {
 
 });
 
+app.get('/messages/last/', function(req, res) {
+  return last;
+});
+
 app.get('/messages/', function(req, res) {
   Message.find({}, function(err, data){
     if(err) {
@@ -217,10 +230,6 @@ app.get('/messages/', function(req, res) {
     }
     res.json(data);
   });
-});
-
-app.get('/messages/last/', function(req, res) {
-return last;
 });
 
 // Spin up the server
