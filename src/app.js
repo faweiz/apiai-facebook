@@ -219,6 +219,10 @@ app.get('/messages/', function(req, res) {
   });
 });
 
+app.get('/messages/last/', function(req, res) {
+return last;
+});
+
 // Spin up the server
 app.listen(REST_PORT, function () {
     console.log('Rest service ready on port ' + REST_PORT);
