@@ -18,6 +18,7 @@ const apiAiService = apiai(APIAI_ACCESS_TOKEN, {language: APIAI_LANG, requestSou
 const sessionIds = new Map();
 const Message = require('../db/message');
 
+let last = {};
 function processEvent(event) {
     var sender = event.sender.id.toString();
 
@@ -28,8 +29,6 @@ function processEvent(event) {
         if (!sessionIds.has(sender)) {
             sessionIds.set(sender, uuid.v1());
         }
-        
-        console.log("User: ", text);
 
         let apiaiRequest = apiAiService.textRequest(text,
         {
@@ -55,9 +54,15 @@ function processEvent(event) {
                     // so we split message if needed
                     var message = new Message({
                       input: text,
-                      response: responseText
+                      response: responseText,
+                      date: new Date().toISOString()
                     });
                     message.save();
+                    last = {
+                      input: text,
+                      response: responseText,
+                      date: new Date().toISOString()
+                    };
                     var splittedText = splitResponse(responseText);
 
                     async.eachSeries(splittedText, (textPart, callback) => {
@@ -188,7 +193,6 @@ app.get('/webhook/', function (req, res) {
 app.post('/webhook/', function (req, res) {
     try {
         var data = JSONbig.parse(req.body);
-
         var messaging_events = data.entry[0].messaging;
         for (var i = 0; i < messaging_events.length; i++) {
             var event = data.entry[0].messaging[i];
