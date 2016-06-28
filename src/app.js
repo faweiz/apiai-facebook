@@ -16,6 +16,7 @@ const FB_PAGE_ACCESS_TOKEN = process.env.FB_PAGE_ACCESS_TOKEN;
 
 const apiAiService = apiai(APIAI_ACCESS_TOKEN, {language: APIAI_LANG, requestSource: "fb"});
 const sessionIds = new Map();
+const Message = require('../db/message');
 
 function processEvent(event) {
     var sender = event.sender.id.toString();
@@ -43,15 +44,20 @@ function processEvent(event) {
 
                 if (isDefined(responseData) && isDefined(responseData.facebook)) {
                     try {
-                        console.log('Robot(formatted): ', responseData);
+                        console.log('Response as formatted message: ', responseData);
                         sendFBMessage(sender, responseData.facebook);
                     } catch (err) {
                         sendFBMessage(sender, {text: err.message });
                     }
                 } else if (isDefined(responseText)) {
-                    console.log('Robot(text): ', responseText);
+                    console.log('Response as text message: ', responseText,text);
                     // facebook API limit for text length is 320,
                     // so we split message if needed
+                    var message = new Message({
+                      input: text,
+                      response: responseText
+                    });
+                    message.save();
                     var splittedText = splitResponse(responseText);
 
                     async.eachSeries(splittedText, (textPart, callback) => {
@@ -125,7 +131,6 @@ function sendFBMessage(sender, messageData, callback) {
         } else if (response.body.error) {
             console.log('Error: ', response.body.error);
         }
-
         if (callback) {
             callback();
         }
@@ -171,7 +176,7 @@ app.get('/', function (req, res) {
 app.get('/webhook/', function (req, res) {
     if (req.query['hub.verify_token'] == FB_VERIFY_TOKEN) {
         res.send(req.query['hub.challenge']);
-        
+
         setTimeout(function () {
             doSubscribeRequest();
         }, 3000);
@@ -199,6 +204,15 @@ app.post('/webhook/', function (req, res) {
         });
     }
 
+});
+
+app.get('/messages/', function(req, res) {
+  Message.find({}, function(err, data){
+    if(err) {
+      res.status(500).send(err);
+    }
+    res.json(data);
+  });
 });
 
 // Spin up the server
