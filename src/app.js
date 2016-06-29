@@ -220,12 +220,7 @@ app.post('/webhook/', function (req, res) {
 });
 
 app.get('/messages/last/', function(req, res) {
-  last.find({}, function(err, data){
-    if(err) {
-      res.status(500).send(err);
-    }
-    res.json(data);
-  });
+  return last;
 });
 
 app.get('/messages/', function(req, res) {
