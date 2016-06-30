@@ -17,4 +17,4 @@ const messageSchema = new Schema({
   }
 });
 
-module.exports = db.model('Message', messageSchema);
+module.exports.Message = db.model('Message', messageSchema);
