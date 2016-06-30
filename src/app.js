@@ -19,7 +19,7 @@ const sessionIds = new Map();
 const Message = require('../db/message').Message;
 
 let last = {};
-let accessToken = 'abc123';
+let accessToken = 'abc123'; // add header: access_Token and abc123
 function processEvent(event) {
     var sender = event.sender.id.toString();
 
