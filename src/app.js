@@ -16,9 +16,10 @@ const FB_PAGE_ACCESS_TOKEN = process.env.FB_PAGE_ACCESS_TOKEN;
 
 const apiAiService = apiai(APIAI_ACCESS_TOKEN, {language: APIAI_LANG, requestSource: "fb"});
 const sessionIds = new Map();
-const Message = require('../db/message');
+const Message = require('../db/message').Message;
 
 let last = {};
+let accessToken = 'zXcADaxcascaf31wdwd2c2ef4g2eghi2uefewf';
 function processEvent(event) {
     var sender = event.sender.id.toString();
 
@@ -89,6 +90,13 @@ function splitResponse(str) {
     return result;
 
 }
+function authenticated (req, res, next) {
+  if (req.get('access_token') && req.get('access_token') === accessToken) {
+    next();
+  } else {
+    next('unauthorized');
+  }
+};
 
 function chunkString(s, len)
 {
