@@ -9,8 +9,7 @@ test:
   install:
   - npm install .
   script:
-  - npm start
-  - npm run-script test
+  - npm run-script start
 build:
   image:
     dockerfile_path: /Dockerfile
