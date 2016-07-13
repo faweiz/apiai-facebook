@@ -9,6 +9,7 @@ test:
   install:
   - npm install .
   script:
+  - npm start
   - npm run-script test
 build:
   image:
