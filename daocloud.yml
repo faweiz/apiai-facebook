@@ -3,7 +3,7 @@ version: "2.0"
 test:
   image: daocloud/ci-node:0.12
   env:
-  - PORT = 12345
+  - PORT = 5000
   install:
   - npm install .
   script:
