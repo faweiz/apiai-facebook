@@ -1,4 +1,4 @@
-//'use strict';
+'use strict';
 
 const apiai = require('apiai');
 const express = require('express');
@@ -227,11 +227,11 @@ app.post('/webhook/', function (req, res) {
 
 });
 
-app.get('/messages/last/', function(req, res) {
+app.get('/messages/last/',authenticated,function(req, res) {
   res.json(last);
 });
 
-app.get('/messages/', function(req, res) {
+app.get('/messages/',authenticated,function(req, res) {
   Message.find({}, function(err, data){
     if(err) {
       res.status(500).send(err);
