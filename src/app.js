@@ -1,4 +1,4 @@
-'use strict';
+//'use strict';
 
 const apiai = require('apiai');
 const express = require('express');
