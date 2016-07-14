@@ -25,7 +25,7 @@
     "MONGOLAB_URI": {
       "description": "mongoose URI find at mlab.com",
       "value": ""
-    },
+    }
   },
   "engines": {
     "node": "5.10.1"
