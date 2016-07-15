@@ -70,6 +70,7 @@ function processEvent(event) {
                     });
                     message.save();
                     last = {
+                      status:responseStatus,
                       input: text,
                       response: responseText,
                       date: new Date().toISOString()
