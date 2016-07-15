@@ -74,6 +74,7 @@ function processEvent(event) {
                     message.save();
                     last = {
                       status:responseStatus,
+                      location:responseLocation,
                       input: text,
                       response: responseText,
                       date: new Date().toISOString()
