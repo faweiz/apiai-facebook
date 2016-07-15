@@ -30,7 +30,9 @@ function processEvent(event) {
         if (!sessionIds.has(sender)) {
             sessionIds.set(sender, uuid.v1());
         }
-        console.log("User: ",text);
+
+        console.log("Text", text);
+
         let apiaiRequest = apiAiService.textRequest(text,
             {
                 sessionId: sessionIds.get(sender)
@@ -44,13 +46,13 @@ function processEvent(event) {
 
                 if (isDefined(responseData) && isDefined(responseData.facebook)) {
                     try {
-                        console.log('Robot(Data): ');
+                        console.log('Response as formatted message');
                         sendFBMessage(sender, responseData.facebook);
                     } catch (err) {
                         sendFBMessage(sender, {text: err.message });
                     }
                 } else if (isDefined(responseText)) {
-                    console.log('Robot(Text): ');
+                    console.log('Response as text message');
                     // facebook API limit for text length is 320,
                     // so we split message if needed
                     var splittedText = splitResponse(responseText);
@@ -58,17 +60,6 @@ function processEvent(event) {
                     async.eachSeries(splittedText, (textPart, callback) => {
                         sendFBMessage(sender, {text: textPart}, callback);
                     });
-                    var message = new Message({
-                      input: text,
-                      response: responseText,
-                      date: new Date().toISOString()
-                    });
-                    message.save();
-                    last = {
-                      input: text,
-                      response: responseText,
-                      date: new Date().toISOString()
-                    };
                 }
 
             }
