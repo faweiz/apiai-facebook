@@ -42,9 +42,10 @@ function processEvent(event) {
             if (isDefined(response.result)) {
                 let responseText = response.result.fulfillment.speech;
                 let responseData = response.result.fulfillment.data;
-            // add "status" "location" for home appliance control
+            // add "status" "location" "appliance" for home appliance control
                 var responseStatus = response.result.parameters.status;
-                var responseLocation = response.result.parameters.location;                
+                var responseLocation = response.result.parameters.location; 
+                var responseAppliance = response.result.parameters.appliance;
                 let action = response.result.action;
 
                 if (isDefined(responseData) && isDefined(responseData.facebook)) {
@@ -64,8 +65,9 @@ function processEvent(event) {
                         sendFBMessage(sender, {text: textPart}, callback);
                     });
                     
-    //                console.log("responseStatus: ", responseStatus);
-    //                console.log("responseLocation: ", responseLocation);
+//                console.log("responseStatus: ", responseStatus);
+//                console.log("responseAppliance: ", responseAppliance);
+//                console.log("responseLocation: ", responseLocation);
                     var message = new Message({
                       input: text,
                       response: responseText,
@@ -74,6 +76,7 @@ function processEvent(event) {
                     message.save();
                     last = {
                       status:responseStatus,
+                      appliance:responseAppliance,
                       location:responseLocation,
                       input: text,
                       response: responseText,
