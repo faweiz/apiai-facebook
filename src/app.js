@@ -54,7 +54,7 @@ function processEvent(event) {
                         sendFBMessage(sender, {text: err.message });
                     }
                 } else if (isDefined(responseText)) {
-                    console.log("Robot(Text): ", responseText);
+                    console.log('Response as text message');
                     // facebook API limit for text length is 320,
                     // so we split message if needed
                     var splittedText = splitResponse(responseText);
