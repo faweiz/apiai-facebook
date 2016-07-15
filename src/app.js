@@ -63,6 +63,7 @@ function processEvent(event) {
                         sendFBMessage(sender, {text: textPart}, callback);
                     });
                     
+                    console.log("responseStatus: ", responseStatus);
                     var message = new Message({
                       input: text,
                       response: responseText,
