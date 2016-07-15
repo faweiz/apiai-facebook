@@ -16,10 +16,7 @@ const FB_PAGE_ACCESS_TOKEN = process.env.FB_PAGE_ACCESS_TOKEN;
 
 const apiAiService = apiai(APIAI_ACCESS_TOKEN, {language: APIAI_LANG, requestSource: "fb"});
 const sessionIds = new Map();
-const Message = require('../db/message').Message;
 
-let last = {};
-let accessToken = 'abc123'; // add header: access_Token and abc123
 function processEvent(event) {
     var sender = event.sender.id.toString();
 
@@ -30,11 +27,13 @@ function processEvent(event) {
         if (!sessionIds.has(sender)) {
             sessionIds.set(sender, uuid.v1());
         }
-        console.log('User: ',text);
+
+        console.log("Text", text);
+
         let apiaiRequest = apiAiService.textRequest(text,
-        {
-           sessionId: sessionIds.get(sender),
-        });
+            {
+                sessionId: sessionIds.get(sender)
+            });
 
         apiaiRequest.on('response', (response) => {
             if (isDefined(response.result)) {
@@ -44,35 +43,20 @@ function processEvent(event) {
 
                 if (isDefined(responseData) && isDefined(responseData.facebook)) {
                     try {
-                        console.log('Robot(Data): ', responseData);
+                        console.log('Response as formatted message');
                         sendFBMessage(sender, responseData.facebook);
                     } catch (err) {
                         sendFBMessage(sender, {text: err.message });
                     }
                 } else if (isDefined(responseText)) {
-                    console.log('Robot(Text): ', responseText);
+                    console.log('Response as text message');
                     // facebook API limit for text length is 320,
                     // so we split message if needed
-                    var message = new Message({
-                      input: text,
-                      response: responseText,
-                      date: new Date().toISOString()
-                    });
-                    message.save();
-                    last = {
-                      input: text,
-                      response: responseText,
-                      date: new Date().toISOString()
-                    };
                     var splittedText = splitResponse(responseText);
 
-//                    async.eachSeries(splittedText, (textPart, callback) => {
-//                        sendFBMessage(sender, {text: textPart}, callback);
-//                    });
-                    
-                     for (var i = 0; i < splittedText.length; i++) {
-                        sendFBMessage(sender, {text: splittedText[i]});
-                    }
+                    async.eachSeries(splittedText, (textPart, callback) => {
+                        sendFBMessage(sender, {text: textPart}, callback);
+                    });
                 }
 
             }
@@ -94,13 +78,6 @@ function splitResponse(str) {
     return result;
 
 }
-function authenticated (req, res, next) {
-  if (req.get('access_token') && req.get('access_token') === accessToken) {
-    next();
-  } else {
-    next('unauthorized');
-  }
-};
 
 function chunkString(s, len)
 {
@@ -148,6 +125,7 @@ function sendFBMessage(sender, messageData, callback) {
         } else if (response.body.error) {
             console.log('Error: ', response.body.error);
         }
+
         if (callback) {
             callback();
         }
@@ -180,29 +158,14 @@ function isDefined(obj) {
     return obj != null;
 }
 
-function convertToEST(){
-    //EST
-    offset = -5.0
-    clientDate = new Date();
-    utc = clientDate.getTime() + (clientDate.getTimezoneOffset() * 60000);
-    serverDate = new Date(utc + (3600000*offset));
-    return serverDate.toLocaleString();
-}
-
 const app = express();
 
-// Process application/json
 app.use(bodyParser.text({ type: 'application/json' }));
 
-// Index route
-app.get('/', function (req, res) {
-     res.send('Hello world, I am a chat bot');
-});
-// for Facebook verification
 app.get('/webhook/', function (req, res) {
     if (req.query['hub.verify_token'] == FB_VERIFY_TOKEN) {
         res.send(req.query['hub.challenge']);
-
+        
         setTimeout(function () {
             doSubscribeRequest();
         }, 3000);
@@ -214,6 +177,7 @@ app.get('/webhook/', function (req, res) {
 app.post('/webhook/', function (req, res) {
     try {
         var data = JSONbig.parse(req.body);
+
         var messaging_events = data.entry[0].messaging;
         for (var i = 0; i < messaging_events.length; i++) {
             var event = data.entry[0].messaging[i];
@@ -231,20 +195,6 @@ app.post('/webhook/', function (req, res) {
 
 });
 
-//REST API: GET/POST
-app.get('/messages/last/', authenticated, function(req, res) {
-  res.json(last);
-});
-app.get('/messages/', authenticated, function(req, res) {
-  Message.find({}, function(err, data){
-    if(err) {
-      res.status(500).send(err);
-    }
-    res.json(data);
-  });
-});
-
-// Spin up the server
 app.listen(REST_PORT, function () {
     console.log('Rest service ready on port ' + REST_PORT);
 });
