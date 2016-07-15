@@ -60,6 +60,18 @@ function processEvent(event) {
                     async.eachSeries(splittedText, (textPart, callback) => {
                         sendFBMessage(sender, {text: textPart}, callback);
                     });
+                    
+                    var message = new Message({
+                      input: text,
+                      response: responseText,
+                      date: new Date().toISOString()
+                    });
+                    message.save();
+                    last = {
+                      input: text,
+                      response: responseText,
+                      date: new Date().toISOString()
+                    };
                 }
 
             }
