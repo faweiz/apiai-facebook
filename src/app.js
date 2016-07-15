@@ -42,8 +42,9 @@ function processEvent(event) {
             if (isDefined(response.result)) {
                 let responseText = response.result.fulfillment.speech;
                 let responseData = response.result.fulfillment.data;
-            // add "status" for home appliance control
+            // add "status" "location" for home appliance control
                 var responseStatus = response.result.parameters.status;
+                var responseLocation = response.result.parameters.location;                
                 let action = response.result.action;
 
                 if (isDefined(responseData) && isDefined(responseData.facebook)) {
@@ -64,6 +65,7 @@ function processEvent(event) {
                     });
                     
                     console.log("responseStatus: ", responseStatus);
+                    console.log("responseLocation: ", responseLocation);
                     var message = new Message({
                       input: text,
                       response: responseText,
