@@ -16,7 +16,10 @@ const FB_PAGE_ACCESS_TOKEN = process.env.FB_PAGE_ACCESS_TOKEN;
 
 const apiAiService = apiai(APIAI_ACCESS_TOKEN, {language: APIAI_LANG, requestSource: "fb"});
 const sessionIds = new Map();
+const Message = require('../db/message').Message;
 
+let last = {};
+let accessToken = 'abc123'; // add header: access_Token and abc123
 function processEvent(event) {
     var sender = event.sender.id.toString();
 
@@ -27,9 +30,7 @@ function processEvent(event) {
         if (!sessionIds.has(sender)) {
             sessionIds.set(sender, uuid.v1());
         }
-
-        console.log("Text", text);
-
+        console.log('User: ',text);
         let apiaiRequest = apiAiService.textRequest(text,
             {
                 sessionId: sessionIds.get(sender)
@@ -43,13 +44,13 @@ function processEvent(event) {
 
                 if (isDefined(responseData) && isDefined(responseData.facebook)) {
                     try {
-                        console.log('Response as formatted message');
+                        console.log('Robot(Data): ', responseData);
                         sendFBMessage(sender, responseData.facebook);
                     } catch (err) {
                         sendFBMessage(sender, {text: err.message });
                     }
                 } else if (isDefined(responseText)) {
-                    console.log('Response as text message');
+                    console.log('Robot(Text): ', responseText);
                     // facebook API limit for text length is 320,
                     // so we split message if needed
                     var splittedText = splitResponse(responseText);
@@ -57,6 +58,17 @@ function processEvent(event) {
                     async.eachSeries(splittedText, (textPart, callback) => {
                         sendFBMessage(sender, {text: textPart}, callback);
                     });
+                    var message = new Message({
+                      input: text,
+                      response: responseText,
+                      date: new Date().toISOString()
+                    });
+                    message.save();
+                    last = {
+                      input: text,
+                      response: responseText,
+                      date: new Date().toISOString()
+                    };
                 }
 
             }
@@ -158,10 +170,23 @@ function isDefined(obj) {
     return obj != null;
 }
 
-const app = express();
+function authenticated (req, res, next) {
+  if (req.get('access_token') && req.get('access_token') === accessToken) {
+    next();
+  } else {
+    next('unauthorized');
+  }
+};
 
+const app = express();
+// Process application/json
 app.use(bodyParser.text({ type: 'application/json' }));
 
+// Index route
+app.get('/', function (req, res) {
+     res.send('Hello world, I am a Facebook chat bot');
+});
+// for Facebook verification
 app.get('/webhook/', function (req, res) {
     if (req.query['hub.verify_token'] == FB_VERIFY_TOKEN) {
         res.send(req.query['hub.challenge']);
