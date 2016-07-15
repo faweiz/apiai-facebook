@@ -43,8 +43,8 @@ function processEvent(event) {
                 let responseText = response.result.fulfillment.speech;
                 let responseData = response.result.fulfillment.data;
             // add "status" "location" "appliance" for home appliance control
-                var responseStatus = response.result.parameters.status;
-                var responseLocation = response.result.parameters.location; 
+                var responseStatus = response.result.parameters.state;
+                var responseLocation = response.result.parameters.locate; 
                 var responseAppliance = response.result.parameters.appliance;
                 let action = response.result.action;
 
