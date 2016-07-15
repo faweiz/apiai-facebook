@@ -31,7 +31,7 @@ function processEvent(event) {
             sessionIds.set(sender, uuid.v1());
         }
 
-        console.log("Text", text);
+        console.log("Text: ", text);
 
         let apiaiRequest = apiAiService.textRequest(text,
             {
@@ -181,6 +181,15 @@ function authenticated (req, res, next) {
   }
 };
 
+function convertToEST(){
+    //EST
+    offset = -5.0
+    clientDate = new Date();
+    utc = clientDate.getTime() + (clientDate.getTimezoneOffset() * 60000);
+    serverDate = new Date(utc + (3600000*offset));
+    return serverDate.toLocaleString();
+}
+
 const app = express();
 // Process application/json
 app.use(bodyParser.text({ type: 'application/json' }));
@@ -202,6 +211,7 @@ app.get('/webhook/', function (req, res) {
     }
 });
 
+// Post messages from api.ai to Facebook messenger
 app.post('/webhook/', function (req, res) {
     try {
         var data = JSONbig.parse(req.body);
@@ -221,6 +231,19 @@ app.post('/webhook/', function (req, res) {
         });
     }
 
+});
+
+//RESTful API: GET/POST
+app.get('/messages/last/', authenticated, function(req, res) {
+  res.json(last);
+});
+app.get('/messages/', authenticated, function(req, res) {
+  Message.find({}, function(err, data){
+    if(err) {
+      res.status(500).send(err);
+    }
+    res.json(data);
+  });
 });
 
 app.listen(REST_PORT, function () {
