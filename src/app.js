@@ -201,6 +201,32 @@ function WebhookProcessing(req, res) {
     intentMap.set('Default Fallback Intent', fallback);
 // intentMap.set('<INTENT_NAME_HERE>', yourFunctionHandler);
     agent.handleRequest(intentMap);
+	
+	
+	var query = agent.query;
+    console.log(`  Query: ${query}`);
+    var responses = agent[0].consoleMessages;
+    console.log(`  Responses: ${JSON.stringify(responses)}`);
+    var intentName = agent.intent;
+    console.log(`  Intent: ${intentName}`);
+	
+	
+	
+	
+	var message = new Message({
+	  input: query,
+	  response: responses,
+	  date: new Date().toISOString()
+	});
+	message.save();
+	last = {
+	  input: query,
+	  response: responses,
+	  date: new Date().toISOString()
+	};
+	
+	
+	
 }
 
 // Webhook
