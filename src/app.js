@@ -218,7 +218,7 @@ function WebhookProcessing(req, res) {
 
 	var message = new Message({
 	  input: query,
-	  response: responses,
+	  response: responses_string,
 	  date: new Date().toISOString()
 	});
 	message.save();
