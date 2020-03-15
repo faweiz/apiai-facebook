@@ -3,7 +3,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const {WebhookClient} = require('dialogflow-fulfillment');
-const Message = require('../db/message').Message;
+//const Message = require('../db/message').Message;
 
 let last = {};
 let accessToken = 'abc123'; // add header: access_Token and abc123
