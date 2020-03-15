@@ -203,32 +203,70 @@ function convertToEST(){
 
 const app = express();
 // Process application/json
-app.use(bodyParser.text({ type: 'application/json' }));
+//app.use(bodyParser.text({ type: 'application/json' }));
+    app.use(bodyParser.json());
 
 // Index route
 app.get('/', function (req, res) {
      res.send('Hello world, I am a Facebook chat bot');
 });
+    
 // for Facebook verification
-app.get('/webhook/', function (req, res) {
+//app.get('/webhook/', function (req, res) {
     
     //res.send(FB_VERIFY_TOKEN);
     
-    res.send(req.query['hub.verify_token']);
+//    res.send(req.query['hub.verify_token']);
     
-    if (req.query['hub.verify_token'] == FB_VERIFY_TOKEN) {
-        res.send(req.query['hub.challenge']);
+//    if (req.query['hub.verify_token'] == FB_VERIFY_TOKEN) {
+//        res.send(req.query['hub.challenge']);
         
-        setTimeout(function () {
-            doSubscribeRequest();
-        }, 3000);
+//        setTimeout(function () {
+//            doSubscribeRequest();
+ //       }, 3000);
+ //   } else {
+  //      res.send('Error, wrong validation token');
+  //  }
+    
+ //   res.send(FB_VERIFY_TOKEN);
+    
+//});
+    
+    
+    
+    // Adds support for GET requests to our webhook
+app.get('/webhook', (req, res) => {
+
+  // Your verify token. Should be a random string.
+  let VERIFY_TOKEN = "abc123456789"
+    
+  // Parse the query params
+  let mode = req.query['hub.mode'];
+  let token = req.query['hub.verify_token'];
+  let challenge = req.query['hub.challenge'];
+    
+  // Checks if a token and mode is in the query string of the request
+  if (mode && token) {
+  
+    // Checks the mode and token sent is correct
+    if (mode === 'subscribe' && token === VERIFY_TOKEN) {
+      
+      // Responds with the challenge token from the request
+      console.log('WEBHOOK_VERIFIED');
+      res.status(200).send(challenge);
+    
     } else {
-        res.send('Error, wrong validation token');
+      // Responds with '403 Forbidden' if verify tokens do not match
+      res.sendStatus(403);     
+      res.send('Error, wrong validation token');
     }
-    
-    res.send(FB_VERIFY_TOKEN);
-    
+  }
 });
+    
+    
+    
+    
+    
 
 // Post messages from api.ai to Facebook messenger
 app.post('/webhook/', function (req, res) {
