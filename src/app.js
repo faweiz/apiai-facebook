@@ -2,8 +2,8 @@
 
 const express = require('express');
 const bodyParser = require('body-parser');
-const uuid = require('node-uuid');
-const JSONbig = require('json-bigint');
+//const uuid = require('node-uuid');
+//const JSONbig = require('json-bigint');
 
 const {WebhookClient} = require('dialogflow-fulfillment');
 
@@ -88,17 +88,6 @@ function authenticated (req, res, next) {
   }
 };
 
-function isDefined(obj) {
-    if (typeof obj == 'undefined') {
-        return false;
-    }
-
-    if (!obj) {
-        return false;
-    }
-
-    return obj != null;
-}
 
 
 
@@ -213,19 +202,19 @@ function WebhookProcessing(req, res) {
     intentMap.set('Default Welcome Intent', welcome);
     intentMap.set('Default Fallback Intent', fallback);
 // intentMap.set('<INTENT_NAME_HERE>', yourFunctionHandler);
-    agent.handleRequest(intentMap);
+    //agent.handleRequest(intentMap);
 	
 	
-	var query = agent.query;
+    var query = agent.query;
     console.log(`  Query: ${query}`);
-    var responses = agent[0].consoleMessages;
+    var responses = agent.consoleMessages;
     console.log(`  Responses: ${JSON.stringify(responses)}`);
     var intentName = agent.intent;
     console.log(`  Intent: ${intentName}`);
 	
 	var s = '{"a":"2da","b":"xfgsfg"}';
-	
-	
+
+
 	var message = new Message({
 	  input: query,
 	  response: responses,
@@ -238,7 +227,7 @@ function WebhookProcessing(req, res) {
 	  date: new Date().toISOString()
 	};
 	
-	
+    agent.handleRequest(intentMap);
 	
 }
 
