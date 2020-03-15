@@ -95,7 +95,6 @@ app.get('/', function (req, res) {
 app.post('/Webhook', function (req, res) {
     console.info(`\n\n>>>>>>> S E R V E R   H I T <<<<<<<`);
     WebhookProcessing(req, res);
-    res.send("webhook");
 });
 
 
