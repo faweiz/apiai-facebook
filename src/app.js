@@ -5,6 +5,8 @@ const bodyParser = require('body-parser');
 const uuid = require('node-uuid');
 const JSONbig = require('json-bigint');
 
+const {WebhookClient} = require('dialogflow-fulfillment');
+
 
 const sessionIds = new Map();
 const Message = require('../db/message').Message;
@@ -16,6 +18,8 @@ let accessToken = 'abc123'; // add header: access_Token and abc123
 const app = express();
 // Process application/json
    app.use(bodyParser.json());
+   app.use(bodyParser.urlencoded({extended: true}));
+
 
 // Index route
 app.get('/', function (req, res) {
@@ -163,6 +167,59 @@ function isDefined(obj) {
 		
     }
 } */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function welcome (agent) {
+    agent.add(`Welcome to Express.JS webhook!`);
+}
+
+function fallback (agent) {
+    agent.add(`I didn't understand`);
+    agent.add(`I'm sorry, can you try again?`);
+}
+
+function WebhookProcessing(req, res) {
+    const agent = new WebhookClient({request: req, response: res});
+    console.info(`agent set`);
+
+    let intentMap = new Map();
+    intentMap.set('Default Welcome Intent', welcome);
+    intentMap.set('Default Fallback Intent', fallback);
+// intentMap.set('<INTENT_NAME_HERE>', yourFunctionHandler);
+    agent.handleRequest(intentMap);
+}
+
+// Webhook
+app.post('/webhook', function (req, res) {
+    console.info(`\n\n>>>>>>> S E R V E R   H I T <<<<<<<`);
+    WebhookProcessing(req, res);
+});
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
