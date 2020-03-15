@@ -238,7 +238,7 @@ app.get('/', function (req, res) {
 app.get('/webhook', (req, res) => {
 
   // Your verify token. Should be a random string.
-  let VERIFY_TOKEN = "abc123456789"
+  let VERIFY_TOKEN = "abc123456789";
     
   // Parse the query params
   let mode = req.query['hub.mode'];
