@@ -13,7 +13,7 @@
     "MONGOLAB_URI": {
       "description": "mongoose URI find at mlab.com",
       "value": ""
-      "required": true
+      "required": true 
     }
   },
   "engines": {
