@@ -212,7 +212,7 @@ app.get('/', function (req, res) {
 // for Facebook verification
 app.get('/webhook/', function (req, res) {
     
-   // res.send(FB_VERIFY_TOKEN);
+    res.send(FB_VERIFY_TOKEN);
     
     if (req.query['hub.verify_token'] == FB_VERIFY_TOKEN) {
         res.send(req.query['hub.challenge']);
@@ -223,6 +223,9 @@ app.get('/webhook/', function (req, res) {
     } else {
         res.send('Error, wrong validation token');
     }
+    
+    res.send(FB_VERIFY_TOKEN);
+    
 });
 
 // Post messages from api.ai to Facebook messenger
