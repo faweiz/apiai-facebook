@@ -47,7 +47,10 @@ function authenticated (req, res, next) {
 };
 
 function welcome (agent) {
-    agent.add(`Welcome to Express.JS webhook!`);
+   // agent.add(`Welcome to Express.JS webhook!`);
+	
+	var responses = agent.consoleMessages;
+	agent.add(responses);
 }
 
 function fallback (agent) {
@@ -72,17 +75,16 @@ function WebhookProcessing(req, res) {
     console.log(`  Responses: ${responses_string}`);
     var intentName = agent.intent;
     console.log(`  Intent: ${intentName}`);
-	
+
     var message = new Message({
 	input: query,
 	response: responses_string,
 	date: new Date().toISOString()
     });
-    message.save();  
-    
+    message.save();
     last = {
 	input: query,
-        response: responses,
+    response: responses,
 	date: new Date().toISOString()
     };
     agent.handleRequest(intentMap);	
