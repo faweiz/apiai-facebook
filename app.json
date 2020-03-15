@@ -22,9 +22,15 @@
       "value": "",
       "required": false
     },
+    "accessToken": {
+      "description": "Agent language",
+      "value": "",
+      "required": ture
+    },
     "MONGOLAB_URI": {
       "description": "mongoose URI find at mlab.com",
       "value": ""
+      "required": ture
     }
   },
   "engines": {
