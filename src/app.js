@@ -73,12 +73,15 @@ function WebhookProcessing(req, res) {
     var intentName = agent.intent;
     console.log(`  Intent: ${intentName}`);
 
+/*	
     var message = new Message({
 	input: query,
 	response: responses_string,
 	date: new Date().toISOString()
     });
     message.save();
+*/    
+    
     last = {
 	input: query,
         response: responses,
