@@ -49,10 +49,23 @@ app.post('/webhook/', function (req, res) {
 }); */
 
 //RESTful API: GET/POST
-app.get('/messages/last/', authenticated, function(req, res) {
+// app.get('/messages/last/', authenticated, function(req, res) {
+  // res.json(last);
+// });
+// app.get('/messages/', authenticated, function(req, res) {
+  // Message.find({}, function(err, data){
+    // if(err) {
+      // res.status(500).send(err);
+    // }
+    // res.json(data);
+  // });
+// });
+
+
+app.get('/messages/last/', function(req, res) {
   res.json(last);
 });
-app.get('/messages/', authenticated, function(req, res) {
+app.get('/messages/', function(req, res) {
   Message.find({}, function(err, data){
     if(err) {
       res.status(500).send(err);
