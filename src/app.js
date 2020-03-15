@@ -208,7 +208,8 @@ function WebhookProcessing(req, res) {
     var query = agent.query;
     console.log(`  Query: ${query}`);
     var responses = agent.consoleMessages;
-    console.log(`  Responses: ${JSON.stringify(responses)}`);
+    var responses_string = JSON.stringify(responses);
+    console.log(`  Responses: ${responses_string}`);
     var intentName = agent.intent;
     console.log(`  Intent: ${intentName}`);
 	
