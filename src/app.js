@@ -217,7 +217,7 @@ app.get('/webhook', function (req, res) {
     //res.send(FB_VERIFY_TOKEN);
     
 //    res.send(req.query['hub.verify_token']);
-    if(req.query['hub.verify_token']){
+    
         if (req.query['hub.verify_token'] == FB_VERIFY_TOKEN) {
             res.send(req.query['hub.challenge']);
 
@@ -227,7 +227,7 @@ app.get('/webhook', function (req, res) {
         } else {
             res.send('Error, wrong validation token');
         }
-    }
+    
     
  //   res.send(FB_VERIFY_TOKEN);
     
