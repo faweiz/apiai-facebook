@@ -6,7 +6,7 @@ const {WebhookClient} = require('dialogflow-fulfillment');
 const Message = require('../db/message').Message;
 
 let last = {};
-let accessToken = 'abc123'; // add header: access_Token and abc123
+const accessToken = process.env.accessToken;//'abc123'; // add header: access_token and "token?"
 
 const app = express();
 // Process application/json
