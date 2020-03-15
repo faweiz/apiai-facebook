@@ -222,7 +222,7 @@ function WebhookProcessing(req, res) {
 	});
 	message.save();
 	last = {
-	  input: s,
+	  input: query,
 	  response: responses,
 	  date: new Date().toISOString()
 	};
