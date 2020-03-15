@@ -16,7 +16,7 @@
     "express": "4.16.3",
     "html-entities": "^1.2.0",
     "json-bigint": "^0.2.0",
-    "mongoose": "^4.5.2",
+    "mongoose": "^5.9.4",
     "node-uuid": "^1.4.7",
     "request": "^2.71.0",
     "dialogflow-fulfillment": "^0.6.1",
