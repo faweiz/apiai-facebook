@@ -210,7 +210,7 @@ function WebhookProcessing(req, res) {
     var intentName = agent.intent;
     console.log(`  Intent: ${intentName}`);
 	
-	
+	var s = '{"a":"2da","b":"xfgsfg"}';
 	
 	
 	var message = new Message({
@@ -220,7 +220,7 @@ function WebhookProcessing(req, res) {
 	});
 	message.save();
 	last = {
-	  input: query,
+	  input: s,
 	  response: responses,
 	  date: new Date().toISOString()
 	};
