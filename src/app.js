@@ -210,6 +210,9 @@ app.get('/', function (req, res) {
 });
 // for Facebook verification
 app.get('/webhook/', function (req, res) {
+    
+    res.send(FB_VERIFY_TOKEN);
+    
     if (req.query['hub.verify_token'] == FB_VERIFY_TOKEN) {
         res.send(req.query['hub.challenge']);
         
